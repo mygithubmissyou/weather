@@ -5,6 +5,8 @@ import android.text.TextUtils;
 import com.example.weather.db.City;
 import com.example.weather.db.Country;
 import com.example.weather.db.Province;
+import com.example.weather.db.Weather;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -70,5 +72,17 @@ public class Utility {
             }
         }
         return false;
+    }
+
+    public static Weather parseWeatherJson(String response){
+        try{
+            JSONObject object=new JSONObject(response);
+            JSONArray array=object.getJSONArray("HeWeather5");
+            JSONObject jsonObject=array.getJSONObject(0);
+            return new Gson().fromJson(jsonObject.toString(),Weather.class);
+        }catch (JSONException e){
+            e.printStackTrace();
+        }
+        return null;
     }
 }

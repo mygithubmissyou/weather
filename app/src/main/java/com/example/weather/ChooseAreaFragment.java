@@ -1,6 +1,7 @@
 package com.example.weather;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -75,7 +76,19 @@ public class ChooseAreaFragment extends Fragment {
                     selectedCity=cityList.get(i);
                     queryCountry();
                 }else if(level==LEVEL_COUNTRY){
+                    String weatherid=countryList.get(i).getWeatherId();
+                    if(getActivity() instanceof MainActivity){
 
+                        Intent intent=new Intent(getActivity(),WeatherActivity.class);
+                        intent.putExtra("weather_id",weatherid);
+                        startActivity(intent);
+                        getActivity().finish();
+                    }else if(getActivity() instanceof WeatherActivity){
+                        WeatherActivity weatherActivity=(WeatherActivity) getActivity();
+                        weatherActivity.layout_drawer.closeDrawers();
+                        weatherActivity.swipe_refresh.setRefreshing(true);
+                        weatherActivity.requestWeatherInfo(weatherid);
+                    }
                 }
             }
         });
@@ -150,8 +163,13 @@ public class ChooseAreaFragment extends Fragment {
         HttpUtil.sendRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                closeProgressDialog();
-                Toast.makeText(getContext(),"加载失败...",Toast.LENGTH_SHORT).show();
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        closeProgressDialog();
+                        Toast.makeText(getContext(),"加载失败...",Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override
