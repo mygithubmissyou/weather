@@ -19,6 +19,8 @@ import com.example.weather.db.City;
 import com.example.weather.db.Country;
 import com.example.weather.db.Province;
 import com.example.weather.util.HttpUtil;
+import com.example.weather.util.MyApplication;
+import com.example.weather.util.ProgressDialogUtil;
 import com.example.weather.util.Utility;
 
 import org.litepal.crud.DataSupport;
@@ -48,9 +50,10 @@ public class ChooseAreaFragment extends Fragment {
     private List<City> cityList;
     private List<Country> countryList;
     private int level;
-    private ProgressDialog progressdialog;
+
     private Province selectedProvince;
     private City selectedCity;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -78,7 +81,6 @@ public class ChooseAreaFragment extends Fragment {
                 }else if(level==LEVEL_COUNTRY){
                     String weatherid=countryList.get(i).getWeatherId();
                     if(getActivity() instanceof MainActivity){
-
                         Intent intent=new Intent(getActivity(),WeatherActivity.class);
                         intent.putExtra("weather_id",weatherid);
                         startActivity(intent);
@@ -87,6 +89,7 @@ public class ChooseAreaFragment extends Fragment {
                         WeatherActivity weatherActivity=(WeatherActivity) getActivity();
                         weatherActivity.layout_drawer.closeDrawers();
                         weatherActivity.swipe_refresh.setRefreshing(true);
+                        weatherActivity.weatherid=weatherid;
                         weatherActivity.requestWeatherInfo(weatherid);
                     }
                 }
@@ -158,15 +161,18 @@ public class ChooseAreaFragment extends Fragment {
             queryServer(url,"country");
         }
     }
+
     private void queryServer(String url, final String type) {
-        showProgressDialog();
+//        showProgressDialog();
+        ProgressDialogUtil.showProgressDialog(getActivity(),"","正在加载");
         HttpUtil.sendRequest(url, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        closeProgressDialog();
+//                        closeProgressDialog();
+                        ProgressDialogUtil.closeProgessDialog();
                         Toast.makeText(getContext(),"加载失败...",Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -188,7 +194,8 @@ public class ChooseAreaFragment extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            closeProgressDialog();
+//                            closeProgressDialog();
+                            ProgressDialogUtil.closeProgessDialog();
                             if("province".equals(type)){
                                 queryProvinces();
                             }else if("city".equals(type)){
@@ -203,17 +210,17 @@ public class ChooseAreaFragment extends Fragment {
         });
     }
 
-    private void showProgressDialog() {
-        if(progressdialog==null){
-            progressdialog=new ProgressDialog(getActivity());
-            progressdialog.setMessage("正在加载...");
-            progressdialog.setCanceledOnTouchOutside(false);
-        }
-        progressdialog.show();
-    }
-    private void closeProgressDialog(){
-        if(progressdialog!=null){
-            progressdialog.dismiss();
-        }
-    }
+//    private void showProgressDialog() {
+//        if(progressdialog==null){
+//            progressdialog=new ProgressDialog(getActivity());
+//            progressdialog.setMessage("正在加载...");
+//            progressdialog.setCanceledOnTouchOutside(false);
+//        }
+//        progressdialog.show();
+//    }
+//    private void closeProgressDialog(){
+//        if(progressdialog!=null){
+//            progressdialog.dismiss();
+//        }
+//    }
 }
