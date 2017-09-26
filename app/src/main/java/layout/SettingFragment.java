@@ -1,8 +1,6 @@
 package layout;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.annotation.Nullable;
@@ -16,7 +14,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.example.weather.AutoUpdateService;
+import com.example.weather.service.AutoUpdateService;
 import com.example.weather.R;
 
 

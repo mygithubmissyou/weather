@@ -1,9 +1,7 @@
-package com.example.weather;
+package com.example.weather.service;
 
 import android.annotation.TargetApi;
 import android.app.AlarmManager;
-import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
@@ -12,9 +10,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
-import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
 import com.example.weather.db.Weather;
@@ -43,16 +39,16 @@ public static int updatetime=8;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         updateWeather();
-        updatePic();
+//        updatePic();
         Intent intent1=new Intent(this,AutoUpdateService.class);
         PendingIntent pi=PendingIntent.getService(this,0,intent1,0);
         AlarmManager manager=(AlarmManager)getSystemService(ALARM_SERVICE);
         int hour=updatetime*60*60*1000;
         long trigrttime= SystemClock.elapsedRealtime()+hour;
-        manager.cancel(pi);
+//        manager.cancel(pi);
         if(is_auto){
             manager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,trigrttime,pi);
-            Toast.makeText(this,"更新时间"+updatetime,Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,updatetime+"小时后更新",Toast.LENGTH_SHORT).show();
         }else {
             manager.cancel(pi);
         }

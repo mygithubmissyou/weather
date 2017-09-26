@@ -41,7 +41,7 @@
             android:value="MqsRNDWbnk5nIcg42RIfl2GnG248QSFK" />
         <service android:name="com.baidu.location.f" android:enabled="true" android:process=":remote">
         </service>
-        <service android:name=".AutoUpdateService" android:enabled="true"/>
+        <service android:name=".service.AutoUpdateService" android:enabled="true"/>
     </application>
 
 </manifest>
