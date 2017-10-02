@@ -8,4 +8,5 @@
 
     <color name="rain_sky_night_start">#041d31</color>
     <color name="rain_sky_night_end">#081621</color>
+    <color name="layout_bg">#8000</color>
 </resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android">
+<item android:duration="200" android:drawable="@drawable/anim_rain_moderate_near"/>
+<item android:duration="200" android:drawable="@drawable/anim_rain_moderate_mid"/>
+<item android:duration="200" android:drawable="@drawable/anim_rain_moderate_far"/>
+</animation-list>

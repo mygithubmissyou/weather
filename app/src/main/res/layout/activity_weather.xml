@@ -3,16 +3,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-    <!--<ImageView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:id="@+id/img_biying"-->
-        <!--android:scaleType="centerCrop"/>-->
-    <layout.WeatherView
+    xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/layout_main">
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/weather_view"/>
+        android:id="@+id/img_biying"
+        android:scaleType="fitStart"/>
+    <include layout="@layout/cloud_layout"></include>
+
+    <SurfaceView
+        android:layout_width="0dp"
+        android:layout_height="0dp"/>
     <android.support.v4.widget.DrawerLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent" android:id="@+id/layout_drawer">
@@ -29,7 +30,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:fitsSystemWindows="true">
+                    android:fitsSystemWindows="true" >
                     <include layout="@layout/title"/>
                     <include layout="@layout/now"/>
                     <include layout="@layout/hour_forecast"/>

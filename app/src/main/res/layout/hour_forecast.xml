@@ -3,9 +3,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="130dp"
                 android:layout_margin="@dimen/layout_margin"
-    android:background="#8000">
-<com.github.mikephil.charting.charts.LineChart
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/line_chart"></com.github.mikephil.charting.charts.LineChart>
+                android:id="@+id/line_chart_layout"
+    android:background="@color/layout_bg">
+<!--<com.github.mikephil.charting.charts.LineChart-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:id="@+id/line_chart"-->
+    <!--&gt;</com.github.mikephil.charting.charts.LineChart>-->
+
+    <!--<layout.LineChartView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/new_line_chart"/>-->
 </RelativeLayout>

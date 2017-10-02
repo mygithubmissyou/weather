@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android">
+<item android:duration="500" android:drawable="@drawable/anim_dust_storm_01"/>
+<item android:duration="500" android:drawable="@drawable/anim_dust_storm_02"/>
+<item android:duration="500" android:drawable="@drawable/anim_dust_storm_03"/>
+<item android:duration="500" android:drawable="@drawable/anim_dust_storm_04"/>
+<item android:duration="500" android:drawable="@drawable/anim_dust_storm_05"/>
+<item android:duration="500" android:drawable="@drawable/anim_dust_storm_06"/>
+</animation-list>
