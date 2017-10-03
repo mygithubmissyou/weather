@@ -58,7 +58,8 @@ public static int updatetime=8;
 //                .setAutoCancel(true)
 //                .build();
 
-        return super.onStartCommand(intent, flags, startId);
+//        return super.onStartCommand(intent, flags, startId);
+        return START_NOT_STICKY;
     }
 //更新必应图片
     private void updatePic() {

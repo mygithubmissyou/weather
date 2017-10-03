@@ -1,37 +1,32 @@
 package com.example.weather;
 
-import android.animation.Animator;
-import android.animation.AnimatorInflater;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
-import android.content.Intent;
+
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
+
 import android.graphics.Color;
-import android.graphics.Path;
-import android.graphics.PixelFormat;
+
 import android.graphics.drawable.Animatable;
-import android.graphics.drawable.AnimationDrawable;
+
 import android.os.Build;
-import android.os.Handler;
+
 import android.preference.PreferenceManager;
-import android.support.v4.media.session.PlaybackStateCompat;
+
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.transition.TransitionManager;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewPropertyAnimator;
+
 import android.view.WindowManager;
-import android.view.animation.AccelerateDecelerateInterpolator;
+
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
+
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -47,15 +42,14 @@ import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.bumptech.glide.Glide;
-import com.example.weather.db.City;
-import com.example.weather.db.Country;
+
 import com.example.weather.db.DailyForecast;
 import com.example.weather.db.HourlyForecast;
-import com.example.weather.db.Province;
+
 import com.example.weather.db.Rain;
-import com.example.weather.db.Snow;
+
 import com.example.weather.db.Weather;
-import com.example.weather.service.AutoUpdateService;
+
 import com.example.weather.util.DBUtils;
 import com.example.weather.util.GetWeatherBG;
 import com.example.weather.util.GetWeatherByLocation;
@@ -74,8 +68,6 @@ import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
-
-import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
 import java.text.ParseException;
