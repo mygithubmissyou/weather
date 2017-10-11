@@ -82,6 +82,7 @@ public class LineChartView extends View {
             textPaint.setStrokeWidth(4);
             textPaint.setTextSize(25);
             if (degress_list.size() > 1 && date_list.size() > 1) {//数据大于2才绘制曲线
+                this.setVisibility(VISIBLE);
                 subVal = (maxVal - minVal) / (degress_list.size() - 1) * 2;
                 use_width = vwidth - margin * 2 - padding * 2;
                 x_offset = use_width / (degress_list.size() - 1);
@@ -123,6 +124,9 @@ public class LineChartView extends View {
                     int date_y = baseLineHeight;
                     mcanvas.drawLine(startX, startY + dot_radius, date_x, date_y, linePaint);
                 }
+            }
+            else {
+                this.setVisibility(GONE);
             }
         }
     }

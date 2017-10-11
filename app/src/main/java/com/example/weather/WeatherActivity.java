@@ -1,22 +1,29 @@
 package com.example.weather;
 
 
+import android.Manifest;
 import android.content.SharedPreferences;
 
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 
 import android.graphics.drawable.Animatable;
 
+import android.location.LocationManager;
 import android.os.Build;
 
 import android.preference.PreferenceManager;
 
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,8 +44,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
-import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.bumptech.glide.Glide;
@@ -122,7 +129,7 @@ public class WeatherActivity extends AppCompatActivity {
     private FrameLayout layout_main;
     private FrameLayout cloud_layout;
     private String weather_condition;
-
+    private BDAbstractLocationListener mylistener=new myListener();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -132,22 +139,13 @@ public class WeatherActivity extends AppCompatActivity {
             view.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
+
         //百度地图初始化
         locationClient = new LocationClient(getApplicationContext());
-        locationClient.registerLocationListener(new BDLocationListener() {
-            @Override
-            public void onReceiveLocation(BDLocation bdLocation) {
-                province = bdLocation.getProvince();
-                province = province.substring(0, province.length() - 1);
-                city = bdLocation.getCity();
-                city = city.substring(0, city.length() - 1);
-                country = bdLocation.getDistrict();
-                country = country.substring(0, country.length() - 1);
-                GetWeatherByLocation.getWeatherIdAndRequest(province, city, country, WeatherActivity.this);
-//                getWeatherIdAndRequest(province,city,country);
-            }
-        });
-        initLocationOption();
+        //动态获取权限
+        getPermission();
+        locationClient.registerLocationListener(mylistener);
+
         locationClient.start();
         setContentView(R.layout.activity_weather);
 
@@ -238,6 +236,7 @@ public class WeatherActivity extends AppCompatActivity {
         btn_map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+//                locationClient.requestLocation();
                 GetWeatherByLocation.getWeatherIdAndRequest(province, city, country, WeatherActivity.this);
 //                getWeatherIdAndRequest(province,city,country);
             }
@@ -245,14 +244,71 @@ public class WeatherActivity extends AppCompatActivity {
         requestWeatherInfo(weatherid);
 
     }
+//百度定位监听器
+    class myListener extends BDAbstractLocationListener{
+    @Override
+    public void onReceiveLocation(BDLocation bdLocation) {
+        Log.d("ssss","sss"+bdLocation.getLocType());
+        province = bdLocation.getProvince();
+        province = province.substring(0, province.length() - 1);
+        city = bdLocation.getCity();
+        city = city.substring(0, city.length() - 1);
+        country = bdLocation.getDistrict();
+        country = country.substring(0, country.length() - 1);
+        GetWeatherByLocation.getWeatherIdAndRequest(province, city, country, WeatherActivity.this);
+//                getWeatherIdAndRequest(province,city,country);
+    }
+}
+    //请求权限
+    private void getPermission() {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            //检查gps是否开启
+            LocationManager locationmanager= (LocationManager) getSystemService(LOCATION_SERVICE);
+            if(!locationmanager.isProviderEnabled(LocationManager.GPS_PROVIDER))
+                Toast.makeText(this,"请打开GRS定位",Toast.LENGTH_SHORT).show();
+            List<String> permissionlist = new ArrayList<>();
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                permissionlist.add(Manifest.permission.ACCESS_COARSE_LOCATION);
+            }
+//            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+//                permissionlist.add(Manifest.permission.READ_PHONE_STATE);
+//            }
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                permissionlist.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            }
+
+            if (!permissionlist.isEmpty()) {
+                String[] permissionArray = permissionlist.toArray(new String[permissionlist.size()]);
+                ActivityCompat.requestPermissions(this, permissionArray, 1);
+            }
+        }
+        initLocationOption();
+    }
+    //权限请求结果
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (grantResults.length != 0 && requestCode == 1) {
+            for (int i : grantResults) {
+                if (i != PackageManager.PERMISSION_GRANTED)
+                    Toast.makeText(this, "你必须给予定位权限", Toast.LENGTH_SHORT).show();
+            }
+            initLocationOption();
+
+        } else {
+            Toast.makeText(this, "请给予权限", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     //初始化百度地图参数
     private void initLocationOption() {
         LocationClientOption clientOption = new LocationClientOption();
+        clientOption.setOpenGps(true);
         clientOption.setTimeOut(10000);
         clientOption.setIsNeedAddress(true);
         clientOption.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
         locationClient.setLocOption(clientOption);
+
     }
 
     @Override
@@ -336,7 +392,7 @@ public class WeatherActivity extends AppCompatActivity {
 //                        tlist.add(cloudFly(imageView, i * width / 20 - 50, i * width / 20 - 50, -80, height, random.nextInt(speed) + 1000));
 //                        cloud_layout.addView(imageView);
 //                    }
-                    WeatherView weatherView=WeatherView.getInstance(this, Rain.getInstance(this,R.drawable.background_for_light_rain));
+                    WeatherView weatherView = WeatherView.getInstance(this, Rain.getInstance(this, R.drawable.background_for_light_rain));
                     cloud_layout.addView(weatherView);
                 } else if (map.get("animate").equals(GetWeatherBG.TYPE_SHOWER)) {
 //                    int speed = map.get("speed");
@@ -351,7 +407,7 @@ public class WeatherActivity extends AppCompatActivity {
 //                        tlist.add(cloudFly(imageView, i * width / 20 + 50, i * width / 20 + 50, -80, height, random.nextInt(speed) + 1000));
 //                        cloud_layout.addView(imageView);
 //                    }
-                    WeatherView weatherView=WeatherView.getInstance(this, Rain.getInstance(this,R.drawable.background_for_light_rain));
+                    WeatherView weatherView = WeatherView.getInstance(this, Rain.getInstance(this, R.drawable.background_for_light_rain));
                     cloud_layout.addView(weatherView);
                 } else if (map.get("animate").equals(GetWeatherBG.TYPE_SUN)) {
                     img_biying.setImageResource(R.drawable.sunshine);
