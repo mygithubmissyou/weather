@@ -13,8 +13,10 @@ import android.support.annotation.Nullable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.RelativeLayout;
 
 import com.example.weather.R;
+import com.example.weather.WeatherActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +37,7 @@ public class LineChartView extends View {
 
     public LineChartView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-
+        layout = (RelativeLayout) ((WeatherActivity) context).findViewById(R.id.line_chart_layout);
     }
 
     public static void setData(List<Integer> degree, List<String> date) {
@@ -47,6 +49,8 @@ public class LineChartView extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
+
+    RelativeLayout layout;
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -82,7 +86,7 @@ public class LineChartView extends View {
             textPaint.setStrokeWidth(4);
             textPaint.setTextSize(25);
             if (degress_list.size() > 1 && date_list.size() > 1) {//数据大于2才绘制曲线
-                this.setVisibility(VISIBLE);
+                layout.setVisibility(VISIBLE);
                 subVal = (maxVal - minVal) / (degress_list.size() - 1) * 2;
                 use_width = vwidth - margin * 2 - padding * 2;
                 x_offset = use_width / (degress_list.size() - 1);
@@ -96,15 +100,16 @@ public class LineChartView extends View {
                     mcanvas.drawText(date_list.get(i).split("\\|")[0], startX - 25, baseLineHeight + 30, textPaint);
                     int font_len = date_list.get(i).split("\\|")[1].split("").length;
                     int font_offset = 0;
+
                     if (font_len > 4) {
                         font_offset = 20;
-                        String substr=date_list.get(i).split("\\|")[1];
-                        mcanvas.drawText(substr.substring(0,2), startX - font_offset, baseLineHeight + 60, textPaint);
-                        mcanvas.drawText(substr.substring(2,substr.length()), startX - font_offset, baseLineHeight + 90, textPaint);
-                    } else if(font_len>3) {
+                        String substr = date_list.get(i).split("\\|")[1];
+                        mcanvas.drawText(substr.substring(0, 2), startX - font_offset, baseLineHeight + 60, textPaint);
+                        mcanvas.drawText(substr.substring(2, substr.length()), startX - font_offset, baseLineHeight + 90, textPaint);
+                    } else if (font_len > 3) {
                         font_offset = 30;
                         mcanvas.drawText(date_list.get(i).split("\\|")[1], startX - font_offset, baseLineHeight + 60, textPaint);
-                    }else {
+                    } else {
                         font_offset = 15;
                         mcanvas.drawText(date_list.get(i).split("\\|")[1], startX - font_offset, baseLineHeight + 60, textPaint);
                     }
@@ -124,13 +129,13 @@ public class LineChartView extends View {
                     int date_y = baseLineHeight;
                     mcanvas.drawLine(startX, startY + dot_radius, date_x, date_y, linePaint);
                 }
-            }
-            else {
-                this.setVisibility(GONE);
+            } else {
+                layout.setVisibility(GONE);
             }
         }
     }
-private Drawable drawable;
+
+    private Drawable drawable;
     private Canvas mcanvas;
     private int vheight;
     private int vwidth;

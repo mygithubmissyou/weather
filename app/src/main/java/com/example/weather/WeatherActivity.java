@@ -261,7 +261,7 @@ public class WeatherActivity extends AppCompatActivity {
 }
     //请求权限
     private void getPermission() {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             //检查gps是否开启
             LocationManager locationmanager= (LocationManager) getSystemService(LOCATION_SERVICE);
             if(!locationmanager.isProviderEnabled(LocationManager.GPS_PROVIDER))
@@ -270,9 +270,9 @@ public class WeatherActivity extends AppCompatActivity {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 permissionlist.add(Manifest.permission.ACCESS_COARSE_LOCATION);
             }
-//            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
-//                permissionlist.add(Manifest.permission.READ_PHONE_STATE);
-//            }
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                permissionlist.add(Manifest.permission.READ_PHONE_STATE);
+            }
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 permissionlist.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             }
