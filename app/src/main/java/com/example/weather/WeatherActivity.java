@@ -284,8 +284,8 @@ public class WeatherActivity extends AppCompatActivity {
         }
         initLocationOption();
     }
-    //权限请求结果
 
+    //权限请求结果
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (grantResults.length != 0 && requestCode == 1) {
@@ -541,11 +541,14 @@ public class WeatherActivity extends AppCompatActivity {
             }
             if (array_x.size() > 1 && array_y.size() > 1) {
 //                initHourForecast(array_x, array_y);
+                line_chart_layout.setVisibility(View.VISIBLE);
                 line_chart_layout.removeAllViews();
                 LineChartView lineChartView = new LineChartView(this);
                 LineChartView.setData(array_y, array_x);
                 lineChartView.invalidate();
                 line_chart_layout.addView(lineChartView);
+            }else{
+                line_chart_layout.setVisibility(View.GONE);
             }
 
             if (weather.aqi != null) {
